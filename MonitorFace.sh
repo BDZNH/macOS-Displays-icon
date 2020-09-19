@@ -77,12 +77,14 @@ icon() {
 		vid=$(printf "$vids\n"|sed -n "${i}p")
 		pid=$(printf "$pids\n"|sed -n "${i}p")
 		name=$(printf "$edids\n"|sed -n "${i}p"|grep -Eo "fc00.*?0a"|sed "s/^fc00//g"|xxd -r -p)
-		valid=$(curl -s $url/${vid}/${vid}.pid|grep -o "${pid}:")
+		#valid=$(curl -s $url/${vid}/${vid}.pid|grep -o "${pid}:")
+		valid=$(cat ${vid}/${vid}.pid|grep -o "${pid}:")
 		if [ x"$valid" = x"${pid}:" ];then
 			echo $text1$i$text2$name$text3
 			echo $displayname$name$displayvid$vid$displaypid$pid
 			echo $downloading
-			curl -s ${url}/${vid}/${pid}.icns > /tmp/DisplayProductID-${pid}.icns
+			#curl -s ${url}/${vid}/${pid}.icns > /tmp/DisplayProductID-${pid}.icns
+			cp -f ${vid}/${pid}.icns /tmp/DisplayProductID-${pid}.icns
 			echo $installing
 			if [ $(sw_vers -productVersion|awk -F '.' '{print $2}') -ge 15 ];then
 				echo $remounting
